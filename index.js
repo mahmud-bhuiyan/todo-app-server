@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const notFound = require("./middlewares/notFound");
 const app = express();
 const userRoutes = require("./routes/userRoutes");
+const notFound = require("./middlewares/notFound");
+const customErrorHandler = require("./middlewares/customErrorHandler");
 
 require("dotenv").config();
 require("./db/connect");
@@ -23,7 +24,6 @@ app.get("/health", (req, res) => {
     status: "SJI - Task Manager API is running",
   });
 });
-
 app.get("/", (req, res) => {
   res.send("Task Manager app is working!");
 });
@@ -33,3 +33,4 @@ app.listen(port, () => {
 });
 
 app.use(notFound);
+app.use(customErrorHandler);
