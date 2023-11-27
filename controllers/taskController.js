@@ -45,8 +45,33 @@ const getTaskById = asyncWrapper(async (req, res) => {
   });
 });
 
+// delete a Task by id
+const deleteTaskById = asyncWrapper(async (req, res) => {
+  const taskID = req.params.id;
+
+  const task = await Task.findOneAndDelete({
+    _id: taskID,
+    owner: req.user._id,
+  });
+
+  if (!task) {
+    throw createCustomError("No task found", 404);
+  }
+
+  res.status(200).json({
+    task: {
+      title: task.title,
+      status: task.status,
+      description: task.description,
+      dueDate: task.dueDate,
+    },
+    message: `${task.title} - task deleted successfully`,
+  });
+});
+
 module.exports = {
   addTask,
   getUserTasks,
   getTaskById,
+  deleteTaskById,
 };

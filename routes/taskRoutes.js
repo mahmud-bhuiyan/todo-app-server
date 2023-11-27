@@ -6,10 +6,11 @@ const {
   addTask,
   getUserTasks,
   getTaskById,
+  deleteTaskById,
 } = require("../controllers/taskController");
 
 router.route("/").post(auth, addTask).get(auth, getUserTasks);
 
-router.route("/:id").get(auth, getTaskById);
+router.route("/:id").get(auth, getTaskById).delete(auth, deleteTaskById);
 
 module.exports = router;
