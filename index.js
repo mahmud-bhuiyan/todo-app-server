@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
 const userRoutes = require("./routes/userRoutes");
+const taskRoutes = require("./routes/taskRoutes");
 const notFound = require("./middlewares/notFound");
 const customErrorHandler = require("./middlewares/customErrorHandler");
 
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 
 // routes
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/tasks", taskRoutes);
 
 // health route
 app.get("/health", (req, res) => {
@@ -24,6 +26,7 @@ app.get("/health", (req, res) => {
     status: "SJI - Task Manager API is running",
   });
 });
+
 app.get("/", (req, res) => {
   res.send("Task Manager app is working!");
 });
