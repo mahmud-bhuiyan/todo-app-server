@@ -9,7 +9,7 @@ const customErrorHandler = require("./middlewares/customErrorHandler");
 
 require("dotenv").config();
 require("./db/connect");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 //middleware
 app.use(cors());
@@ -28,10 +28,6 @@ app.get("/health", (req, res) => {
   res.status(200).json({
     status: "SJI - Task Manager API is running",
   });
-});
-
-app.get("/", (req, res) => {
-  res.send("Task Manager app is working!");
 });
 
 app.listen(port, () => {
