@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const notFound = require("./middlewares/notFound");
 const app = express();
 
 require("dotenv").config();
@@ -26,3 +27,5 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Task Manager app listening on port ${port}`);
 });
+
+app.use(notFound);
