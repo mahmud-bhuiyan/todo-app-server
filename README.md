@@ -215,7 +215,7 @@ GET /api/v1/tasks/:id
 ### Update a task by id
 
 ```http
-PUT /api/v1/tasks/:id
+PATCH /api/v1/tasks/:id
 ```
 
 #### Demo Request
