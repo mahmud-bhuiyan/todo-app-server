@@ -4,7 +4,8 @@ const {
   registerUser,
   loginUser,
   logoutUser,
-  viewUser,
+  viewUserDetails,
+  updateUserDetails,
 } = require("../controllers/userController");
 const auth = require("../middlewares/auth");
 
@@ -22,6 +23,9 @@ router.post("/login", loginUser);
 router.post("/logout", auth, logoutUser);
 
 // View user details
-router.get("/user", auth, viewUser);
+router.get("/user", auth, viewUserDetails);
+
+// Update user details
+router.patch("/user/update", auth, updateUserDetails);
 
 module.exports = router;

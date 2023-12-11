@@ -83,8 +83,8 @@ const logoutUser = asyncWrapper(async (req, res) => {
   res.status(200).send({ message: "User logged out successfully" });
 });
 
-// viewUser
-const viewUser = asyncWrapper(async (req, res) => {
+// viewUserDetails
+const viewUserDetails = asyncWrapper(async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId);
 
@@ -99,4 +99,38 @@ const viewUser = asyncWrapper(async (req, res) => {
   res.status(200).json({ message: "User found", user: userDetails });
 });
 
-module.exports = { registerUser, loginUser, logoutUser, viewUser };
+// updateUserDetails
+const updateUserDetails = asyncWrapper(async (req, res) => {
+  const userId = req.user._id;
+  const { name, email } = req.body;
+
+  // Find the user by ID
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw createCustomError("User not found!", 404);
+  }
+
+  // Update user details
+  user.name = name || user.name;
+  user.email = email || user.email;
+
+  // Save the updated user
+  await user.save();
+
+  // Updated user details
+  const userDetails = customUserDetails(user);
+
+  // Sending the response with updated user details
+  res
+    .status(200)
+    .json({ message: "User updated successfully", user: userDetails });
+});
+
+module.exports = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  viewUserDetails,
+  updateUserDetails,
+};
