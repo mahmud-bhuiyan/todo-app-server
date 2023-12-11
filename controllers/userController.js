@@ -24,8 +24,7 @@ const registerUser = asyncWrapper(async (req, res) => {
   }
 
   // New user
-  const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({ name, email, password: hashedPassword });
 
   await user.save();
@@ -127,10 +126,43 @@ const updateUserDetails = asyncWrapper(async (req, res) => {
     .json({ message: "User updated successfully", user: userDetails });
 });
 
+// updateUserPassword
+const updateUserPassword = asyncWrapper(async (req, res) => {
+  const userId = req.user._id;
+  const { currentPassword, newPassword, confirmNewPassword } = req.body;
+
+  // Find the user by ID
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw createCustomError("User not found!", 404);
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+  if (!isMatch) {
+    throw createCustomError("Current password is incorrect", 401);
+  }
+
+  if (newPassword !== confirmNewPassword) {
+    throw createCustomError("New password and confirmation do not match", 400);
+  }
+
+  // Hash the new password
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+  user.password = hashedNewPassword;
+
+  await user.save();
+
+  res.status(200).json({ message: "Password updated successfully" });
+});
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   viewUserDetails,
   updateUserDetails,
+  updateUserPassword,
 };
