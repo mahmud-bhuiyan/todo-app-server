@@ -10,6 +10,9 @@ const customUserDetails = (user) => {
   return { _id, name, email };
 };
 
+// Array to store destroyed tokens
+const destroyedTokens = [];
+
 //register
 const registerUser = asyncWrapper(async (req, res) => {
   const { name, email, password } = req.body;
@@ -21,7 +24,10 @@ const registerUser = asyncWrapper(async (req, res) => {
   }
 
   // New user
-  const user = new User({ name, email, password });
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const user = new User({ name, email, password: hashedPassword });
+
   await user.save();
 
   // user details
@@ -29,7 +35,7 @@ const registerUser = asyncWrapper(async (req, res) => {
 
   res
     .status(201)
-    .send({ user: userDetails, message: "User created successfully" });
+    .send({ message: "User created successfully", user: userDetails });
 });
 
 //login
@@ -47,16 +53,34 @@ const loginUser = asyncWrapper(async (req, res) => {
     throw createCustomError("Invalid credentials", 401);
   }
 
-  // user details
-  const userDetails = customUserDetails(user);
-
   const token = jwt.sign(
     {
       _id: user._id.toString(),
     },
     process.env.JWT_SECRET_KEY
   );
-  res.send({ user: userDetails, token, message: "Logged in successfully" });
+
+  if (destroyedTokens.includes(token)) {
+    throw createCustomError("Token has been destroyed", 401);
+  }
+
+  // user details
+  const userDetails = customUserDetails(user);
+
+  res.send({ message: "Logged in successfully", user: userDetails, token });
 });
 
-module.exports = { registerUser, loginUser };
+// Logout user
+const logoutUser = asyncWrapper(async (req, res) => {
+  const token = req.header("Authorization")?.replace("Bearer ", "");
+
+  if (!token) {
+    throw createCustomError("Token not provided", 401);
+  }
+
+  destroyedTokens.push(token);
+
+  res.status(200).send({ message: "User logged out successfully" });
+});
+
+module.exports = { registerUser, loginUser, logoutUser };
