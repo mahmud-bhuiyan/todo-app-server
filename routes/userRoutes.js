@@ -4,7 +4,9 @@ const {
   registerUser,
   loginUser,
   logoutUser,
+  viewUser,
 } = require("../controllers/userController");
+const auth = require("../middlewares/auth");
 
 router.get("/", (req, res) => {
   res.send("User routes are working!");
@@ -17,6 +19,9 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 
 // Logout a user
-router.post("/logout", logoutUser);
+router.post("/logout", auth, logoutUser);
+
+// View user details
+router.get("/user", auth, viewUser);
 
 module.exports = router;

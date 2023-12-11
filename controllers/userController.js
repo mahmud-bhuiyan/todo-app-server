@@ -83,4 +83,20 @@ const logoutUser = asyncWrapper(async (req, res) => {
   res.status(200).send({ message: "User logged out successfully" });
 });
 
-module.exports = { registerUser, loginUser, logoutUser };
+// viewUser
+const viewUser = asyncWrapper(async (req, res) => {
+  const userId = req.user._id;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw createCustomError("User not found!", 404);
+  }
+
+  // user details
+  const userDetails = customUserDetails(user);
+
+  // Sending the response with user details
+  res.status(200).json({ message: "User found", user: userDetails });
+});
+
+module.exports = { registerUser, loginUser, logoutUser, viewUser };
