@@ -14,6 +14,16 @@ const addTask = asyncWrapper(async (req, res) => {
   // Extract task details from the request body
   const { title, description, status, dueDate } = req.body;
 
+  // Check if a task with the same title already exists for the user
+  const existingTask = await Task.findOne({
+    title,
+    owner: req.user._id,
+  });
+
+  if (existingTask) {
+    throw createCustomError("Task with the same title already exists", 400);
+  }
+
   // Create a new task with user ID as the owner
   const task = new Task({
     title,
