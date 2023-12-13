@@ -10,9 +10,6 @@ const customUserDetails = (user) => {
   return { _id, name, email };
 };
 
-// Array to store destroyed tokens
-const destroyedTokens = [];
-
 //register
 const registerUser = asyncWrapper(async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
@@ -70,10 +67,6 @@ const loginUser = asyncWrapper(async (req, res) => {
     process.env.JWT_SECRET_KEY
   );
 
-  if (destroyedTokens.includes(token)) {
-    throw createCustomError("Token has been destroyed", 401);
-  }
-
   // user details
   const userDetails = customUserDetails(user);
 
@@ -82,14 +75,6 @@ const loginUser = asyncWrapper(async (req, res) => {
 
 // Logout user
 const logoutUser = asyncWrapper(async (req, res) => {
-  const token = req.header("Authorization")?.replace("Bearer ", "");
-
-  if (!token) {
-    throw createCustomError("Token not provided", 401);
-  }
-
-  destroyedTokens.push(token);
-
   res.status(200).send({ message: "User logged out successfully" });
 });
 
