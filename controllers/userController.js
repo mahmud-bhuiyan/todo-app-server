@@ -15,7 +15,11 @@ const destroyedTokens = [];
 
 //register
 const registerUser = asyncWrapper(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    throw createCustomError("Password and Confirm Password do not match", 400);
+  }
 
   // Duplicate user handling
   const existingUser = await User.findOne({ email });
@@ -27,6 +31,13 @@ const registerUser = asyncWrapper(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({ name, email, password: hashedPassword });
 
+  const token = jwt.sign(
+    {
+      _id: user._id.toString(),
+    },
+    process.env.JWT_SECRET_KEY
+  );
+
   await user.save();
 
   // user details
@@ -34,7 +45,7 @@ const registerUser = asyncWrapper(async (req, res) => {
 
   res
     .status(201)
-    .send({ message: "User created successfully", user: userDetails });
+    .send({ message: "User created successfully", user: userDetails, token });
 });
 
 //login
