@@ -125,7 +125,7 @@ const updateUserDetails = asyncWrapper(async (req, res) => {
 // updateUserPassword
 const updateUserPassword = asyncWrapper(async (req, res) => {
   const userId = req.user._id;
-  const { currentPassword, newPassword, confirmNewPassword } = req.body;
+  const { currentPassword, newPassword, confirmPassword } = req.body;
 
   // Find the user by ID
   const user = await User.findById(userId);
@@ -140,7 +140,7 @@ const updateUserPassword = asyncWrapper(async (req, res) => {
     throw createCustomError("Current password is incorrect", 401);
   }
 
-  if (newPassword !== confirmNewPassword) {
+  if (newPassword !== confirmPassword) {
     throw createCustomError("New password and confirmation do not match", 400);
   }
 
