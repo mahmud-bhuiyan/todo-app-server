@@ -30,6 +30,10 @@ app.get("/health", (req, res) => {
   });
 });
 
+// app.get("/", (req, res) => {
+//   res.send("Task Manager app is running");
+// });
+
 app.listen(port, () => {
   console.log(`Task Manager app listening on port ${port}`);
 });
