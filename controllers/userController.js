@@ -73,11 +73,6 @@ const loginUser = asyncWrapper(async (req, res) => {
   res.send({ message: "Logged in successfully", user: userDetails, token });
 });
 
-// Logout user
-const logoutUser = asyncWrapper(async (req, res) => {
-  res.status(200).send({ message: "User logged out successfully" });
-});
-
 // viewUserDetails
 const viewUserDetails = asyncWrapper(async (req, res) => {
   const userId = req.user._id;
@@ -157,7 +152,6 @@ const updateUserPassword = asyncWrapper(async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
-  logoutUser,
   viewUserDetails,
   updateUserDetails,
   updateUserPassword,

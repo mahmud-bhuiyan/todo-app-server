@@ -3,7 +3,6 @@ const router = express.Router();
 const {
   registerUser,
   loginUser,
-  logoutUser,
   viewUserDetails,
   updateUserDetails,
   updateUserPassword,
@@ -19,9 +18,6 @@ router.post("/register", registerUser);
 
 // Login a user
 router.post("/login", loginUser);
-
-// Logout a user
-router.get("/logout", auth, logoutUser);
 
 // View user details
 router.get("/me", auth, viewUserDetails);
