@@ -10,10 +10,22 @@ const customUserDetails = (user) => {
   return { _id, name, email };
 };
 
+// JWT token generator
+const generateAuthToken = (userId) => {
+  return jwt.sign(
+    {
+      _id: userId.toString(),
+    },
+    process.env.JWT_SECRET_KEY
+  );
+};
+
 //register
 const registerUser = asyncWrapper(async (req, res) => {
+  // Extracting user information from the request body
   const { name, email, password, confirmPassword } = req.body;
 
+  // Checking if the provided password and confirmPassword match
   if (password !== confirmPassword) {
     throw createCustomError("Password and Confirm Password do not match", 400);
   }
@@ -24,17 +36,16 @@ const registerUser = asyncWrapper(async (req, res) => {
     throw createCustomError("Email is already in use", 400);
   }
 
-  // New user
+  // Hashing the user's password
   const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Creating a new User instance with hashed password
   const user = new User({ name, email, password: hashedPassword });
 
-  const token = jwt.sign(
-    {
-      _id: user._id.toString(),
-    },
-    process.env.JWT_SECRET_KEY
-  );
+  // Generating a JWT token for the newly registered user
+  const token = generateAuthToken(user._id);
 
+  // Saving the new user in the database
   await user.save();
 
   // user details
@@ -47,37 +58,46 @@ const registerUser = asyncWrapper(async (req, res) => {
 
 //login
 const loginUser = asyncWrapper(async (req, res) => {
+  // Extract email and password from the request body
   const { email, password } = req.body;
+
+  // Find the user in the database using the provided email
   const user = await User.findOne({ email });
 
+  // If no user is found
   if (!user) {
     throw createCustomError("User not found!", 404);
   }
 
+  // Compare the provided password with the hashed password stored in the database
   const isMatch = await bcrypt.compare(password, user.password);
 
+  // If passwords don't match
   if (!isMatch) {
     throw createCustomError("Invalid credentials", 401);
   }
 
-  const token = jwt.sign(
-    {
-      _id: user._id.toString(),
-    },
-    process.env.JWT_SECRET_KEY
-  );
+  // Generate a JSON Web Token (JWT) for authentication
+  const token = generateAuthToken(user._id);
 
-  // user details
+  // Get custom details about the user
   const userDetails = customUserDetails(user);
 
-  res.send({ message: "Logged in successfully", user: userDetails, token });
+  // Send a successful response with the user details and token
+  res
+    .status(200)
+    .send({ message: "Logged in successfully", user: userDetails, token });
 });
 
 // viewUserDetails
 const viewUserDetails = asyncWrapper(async (req, res) => {
+  // Extract user ID from the authenticated user in the request object
   const userId = req.user._id;
+
+  // Find the user in the database by ID
   const user = await User.findById(userId);
 
+  // If no user is found
   if (!user) {
     throw createCustomError("User not found!", 404);
   }
@@ -91,12 +111,16 @@ const viewUserDetails = asyncWrapper(async (req, res) => {
 
 // updateUserDetails
 const updateUserDetails = asyncWrapper(async (req, res) => {
+  // Extract user ID from the request object
   const userId = req.user._id;
+
+  // Extract name and email from the request body
   const { name, email } = req.body;
 
   // Find the user by ID
   const user = await User.findById(userId);
 
+  // If no user is found
   if (!user) {
     throw createCustomError("User not found!", 404);
   }
@@ -119,34 +143,53 @@ const updateUserDetails = asyncWrapper(async (req, res) => {
 
 // updateUserPassword
 const updateUserPassword = asyncWrapper(async (req, res) => {
+  // Extract user information from the request
   const userId = req.user._id;
   const { currentPassword, newPassword, confirmPassword } = req.body;
 
   // Find the user by ID
   const user = await User.findById(userId);
 
+  // Check if the user exists
   if (!user) {
     throw createCustomError("User not found!", 404);
   }
 
+  // Compare the current password with the stored hashed password
   const isMatch = await bcrypt.compare(currentPassword, user.password);
 
+  // If passwords don't match, throw an error
   if (!isMatch) {
     throw createCustomError("Current password is incorrect", 401);
   }
 
+  // Check if the new password and confirm password match
   if (newPassword !== confirmPassword) {
-    throw createCustomError("New password and confirmation do not match", 400);
+    throw createCustomError(
+      "New password and confirm password do not match",
+      400
+    );
+  }
+
+  // Check if the new password is different from the current password
+  if (currentPassword === newPassword) {
+    throw createCustomError(
+      "New password must be different from the current password",
+      400
+    );
   }
 
   // Hash the new password
   const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
+  // Update the user's password with the hashed new password
   user.password = hashedNewPassword;
 
+  // Save the updated user
   await user.save();
 
-  res.status(200).json({ message: "Password updated successfully" });
+  // Respond with success message and user details
+  res.status(200).json({ message: "Password Updated Successfully" });
 });
 
 module.exports = {
