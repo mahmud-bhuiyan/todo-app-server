@@ -21,7 +21,7 @@ const addTask = asyncWrapper(async (req, res) => {
   });
 
   if (existingTask) {
-    throw createCustomError("Task with the same title already exists", 400);
+    throw createCustomError("Todo with the same title already exists", 400);
   }
 
   // Create a new task with user ID as the owner
@@ -40,8 +40,8 @@ const addTask = asyncWrapper(async (req, res) => {
 
   // Respond with the created task and a success message
   res.status(201).json({
-    message: "Task created successfully",
-    task: taskDetails,
+    message: "Todo created successfully",
+    todo: taskDetails,
   });
 });
 
@@ -57,7 +57,7 @@ const getUserTasks = asyncWrapper(async (req, res) => {
 
   // Respond with the tasks and additional information
   res.status(200).json({
-    message: "Tasks fetched successfully",
+    message: "Todos fetched successfully",
     count: formattedTasks.length,
     tasks: formattedTasks,
   });
@@ -73,15 +73,15 @@ const getTaskById = asyncWrapper(async (req, res) => {
   });
 
   if (!task) {
-    throw createCustomError("No task found", 404);
+    throw createCustomError("No todo found", 404);
   }
 
   // Format the task details for the response
   const formattedTask = customTaskDetails(task);
 
   res.status(200).json({
-    message: "Task fetched successfully",
-    task: formattedTask,
+    message: "Todo fetched successfully",
+    todo: formattedTask,
   });
 });
 
@@ -111,7 +111,7 @@ const updateTaskById = asyncWrapper(async (req, res) => {
   });
 
   if (!task) {
-    throw createCustomError("No task found", 404);
+    throw createCustomError("No todo found", 404);
   }
 
   updates.forEach((update) => (task[update] = req.body[update]));
@@ -122,8 +122,8 @@ const updateTaskById = asyncWrapper(async (req, res) => {
   const formattedTask = customTaskDetails(task);
 
   res.status(200).json({
-    message: "Task updated successfully",
-    task: formattedTask,
+    message: "Todo updated successfully",
+    todo: formattedTask,
   });
 });
 
@@ -138,12 +138,12 @@ const deleteTaskById = asyncWrapper(async (req, res) => {
   });
 
   if (!task) {
-    throw createCustomError("No task found", 404);
+    throw createCustomError("No todo found", 404);
   }
 
   res.status(200).json({
     message: `${task.title} - deleted successfully`,
-    task: {
+    todo: {
       title: task.title,
       status: task.status,
     },
