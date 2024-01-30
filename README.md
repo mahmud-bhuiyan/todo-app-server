@@ -3,9 +3,11 @@
 Welcome to the Task Management API documentation. This API is implemented using Node.js, Express.js and MongoDB, providing functionality for managing tasks.
 
 ## Introduction
+
 This Task Management API is designed to help you efficiently organize and track tasks. It leverages Node.js for server-side logic, Express.js for routing, and MongoDB for data storage.
 
 ## Prerequisites
+
 - Node.js and npm installed on your machine
 - MongoDB installed locally or accessible remotely
 
@@ -50,6 +52,7 @@ Follow these steps to set up and run the project:
    Access the application in a web browser at `http://localhost:3001`.
 
 ## Database Model
+
 ### User Model
 
 - **name**: users name
@@ -65,12 +68,12 @@ Follow these steps to set up and run the project:
 - **owner**: ID of the user who created the task
 
 ## Authentication
+
 To access certain features of the API, you'll need to authenticate using a token. Follow the authentication process to obtain a token and include it in the headers for secure interactions.
 
 ## Endpoints
 
 ### **Check Health**
-
 
 ```http
 GET /health
@@ -106,14 +109,17 @@ POST /api/v1/users/login
   "password": "Demopassword123"
 }
 ```
+
 ### Making Authenticated GET, POST, PATCH, DELETE Requests
 
 For GET, POST, PATCH, DELETE requests that require authentication, you need to include the user's token obtained during the login process. Follow these steps to use the token in your request:
 
 1. **Token Acquisition:**
+
    - First, ensure that the user is authenticated and has obtained a valid token during the login process.
 
 2. **Include Token in Headers:**
+
    - In your GET, POST, PATCH, DELETE request, include the token in the headers.
      - **Key:** `Authorization`
      - **Value:** `Bearer YOUR_TOKEN`
@@ -125,7 +131,9 @@ For GET, POST, PATCH, DELETE requests that require authentication, you need to i
 ```http
 POST /api/v1/tasks
 ```
+
 **Headers:**
+
 ```
 Content-Type: application/json
 Authorization: Bearer demo_token_from_user_login
@@ -180,10 +188,10 @@ GET /api/v1/tasks
       "createdAt": "2023-11-27T17:42:59.035Z",
       "updatedAt": "2023-11-27T17:44:25.242Z",
       "__v": 0
-      }
-    ],
-    "count": 2,
-    "message": "Tasks fetched successfully"
+    }
+  ],
+  "count": 2,
+  "message": "Tasks fetched successfully"
 }
 ```
 
@@ -198,17 +206,17 @@ GET /api/v1/tasks/:id
 ```json
 {
   "task": {
-      "_id": "6564e7b9d4059018a846b1d4",
-      "title": "Task 1",
-      "description": "Description of Task 1",
-      "status": "Completed",
-      "owner": "6564d4aead2453846a5d42e4",
-      "dueDate": "2023-12-04T17:42:59.035Z",
-      "createdAt": "2023-11-27T17:42:59.035Z",
-      "updatedAt": "2023-11-27T17:44:25.242Z",
-      "__v": 0
-    },
-    "message": "Task fetched successfully"
+    "_id": "6564e7b9d4059018a846b1d4",
+    "title": "Task 1",
+    "description": "Description of Task 1",
+    "status": "Completed",
+    "owner": "6564d4aead2453846a5d42e4",
+    "dueDate": "2023-12-04T17:42:59.035Z",
+    "createdAt": "2023-11-27T17:42:59.035Z",
+    "updatedAt": "2023-11-27T17:44:25.242Z",
+    "__v": 0
+  },
+  "message": "Task fetched successfully"
 }
 ```
 
@@ -234,17 +242,17 @@ PATCH /api/v1/tasks/:id
 ```json
 {
   "task": {
-      "_id": "6564e7b9d4059018a846b1d4",
-      "title": "Task 1 updated",
-      "description": "Description of Task 1 updated",
-      "status": "Completed",
-      "owner": "6564d4aead2453846a5d42e4",
-      "dueDate": "2023-11-28T00:00:00.000Z",
-      "createdAt": "2023-11-27T17:42:59.035Z",
-      "updatedAt": "2023-11-27T17:44:25.242Z",
-      "__v": 0
-    },
-    "message": "Task updated successfully"
+    "_id": "6564e7b9d4059018a846b1d4",
+    "title": "Task 1 updated",
+    "description": "Description of Task 1 updated",
+    "status": "Completed",
+    "owner": "6564d4aead2453846a5d42e4",
+    "dueDate": "2023-11-28T00:00:00.000Z",
+    "createdAt": "2023-11-27T17:42:59.035Z",
+    "updatedAt": "2023-11-27T17:44:25.242Z",
+    "__v": 0
+  },
+  "message": "Task updated successfully"
 }
 ```
 
@@ -258,13 +266,13 @@ DELETE /api/v1/tasks/:id
 
 ```json
 {
-    "task": {
-        "title": "task 4",
-        "status": "Completed",
-        "description": "Description of Task 4",
-        "dueDate": "2023-11-28T00:00:00.000Z"
-    },
-    "message": "task 4 - task deleted successfully"
+  "task": {
+    "title": "task 4",
+    "status": "Completed",
+    "description": "Description of Task 4",
+    "dueDate": "2023-11-28T00:00:00.000Z"
+  },
+  "message": "task 4 - task deleted successfully"
 }
 ```
 
@@ -333,10 +341,14 @@ project-root/
 ```
 
 ## Libraries Used
+
 ### Server
+
 - **Node**
 - **Express**
+
 ### Additional Libraries
+
 - **bcrypt:** Library for hashing passwords.
 - **body-parser:** Middleware for parsing incoming request bodies in Express.
 - **cors:** Middleware for handling Cross-Origin Resource Sharing in Express.
@@ -345,8 +357,3 @@ project-root/
 - **jsonwebtoken:** Library for generating and verifying JSON Web Tokens (JWT).
 - **mongoose:** MongoDB object modeling for Node.js.
 - **nodemon:** Utility that monitors for changes in files and automatically restarts the server.
-
-
-## The END
-
-Many Thanks to `SJ Innovation` and `Project MearnifyU Team` For Your Support!
