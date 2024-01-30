@@ -16,8 +16,8 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-// static file path
-app.use(express.static("./public"));
+// // static file path
+// app.use(express.static("./public"));
 
 // routes
 app.use("/api/v1/users", userRoutes);
@@ -26,16 +26,16 @@ app.use("/api/v1/tasks", taskRoutes);
 // health route
 app.get("/health", (req, res) => {
   res.status(200).json({
-    status: "SJI - Task Manager API is running",
+    status: "Todo API is running",
   });
 });
 
-// app.get("/", (req, res) => {
-//   res.send("Task Manager app is running");
-// });
+app.get("/", (req, res) => {
+  res.send("Todo app is running");
+});
 
 app.listen(port, () => {
-  console.log(`Task Manager app listening on port ${port}`);
+  console.log(`Todo app listening on port ${port}`);
 });
 
 app.use(notFound);
