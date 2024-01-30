@@ -1,10 +1,10 @@
-# Task Management API Documentation
+# Todo App API Documentation
 
-Welcome to the Task Management API documentation. This API is implemented using Node.js, Express.js and MongoDB, providing functionality for managing tasks.
+Welcome to the Todo App API documentation. This API is implemented using Node.js, Express.js and MongoDB, providing functionality for managing tasks.
 
 ## Introduction
 
-This Task Management API is designed to help you efficiently organize and track tasks. It leverages Node.js for server-side logic, Express.js for routing, and MongoDB for data storage.
+This Todo App API is designed to help you efficiently organize and track tasks. It leverages Node.js for server-side logic, Express.js for routing, and MongoDB for data storage.
 
 ## Prerequisites
 
@@ -18,13 +18,13 @@ Follow these steps to set up and run the project:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/mahmud-bhuiyan/SJI-task-manager-API.git
+   git clone https://github.com/mahmud-bhuiyan/todo-app-server.git
    ```
 
 2. **Install dependencies:**
 
    ```bash
-   cd SJI-task-manager-API
+   cd todo-app-server
    npm install
    ```
 
